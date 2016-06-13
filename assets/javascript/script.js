@@ -11,10 +11,28 @@ var diffTime = "";
 var tRemainder = "";
 var tilTrain = "";
 var nextTrain = "";
-var now = moment();
+var update = function(){
+	$('#trainData > tbody').empty();
+	dataRef.on("child_added", function(snapshot){
+		startConverted = moment(snapshot.val().start,"hh:mm");
+
+		diffTime = moment().diff(startConverted, "minutes");
+
+		tRemainder = diffTime % snapshot.val().frequency;
+
+    tilTrain = snapshot.val().frequency - tRemainder;
+
+    nextTrain = moment().add(tilTrain, "minutes");
+   
+    $('#trainData > tbody').append("<tr><td>" + snapshot.val().name + "</td><td>" + snapshot.val().destination + "</td><td>" + snapshot.val().frequency + "</td><td>" + nextTrain.format("hh:mm") + "</td><td>" + tilTrain + "</td></tr>");
+	})
+};
 
 //on ready function wrapped around jQuery
 $(document).on('ready', function(){
+
+	// update();
+  setInterval(update, 1000);
 
 	// Capture Button Click
     $("#submitTrain").on("click", function() {
@@ -29,7 +47,6 @@ $(document).on('ready', function(){
             'destination': destination,
             'start': start,
             'frequency': frequency,
-            // 'dateAdded': Firebase.ServerValue.TIMESTAMP
         });
 
         // Don't refresh the page!
@@ -37,40 +54,38 @@ $(document).on('ready', function(){
     });
 
     //Firebase watcher + initial loader HINT: .on("value")
-    dataRef.on("child_added", function(snapshot) {
+    // dataRef.on("child_added", function(snapshot){
 
-        // Log everything that's coming out of snapshot
-        console.log(snapshot.val());
-        console.log(snapshot.val().name);
-        console.log(snapshot.val().destination);
-        console.log(snapshot.val().start);
-        console.log(snapshot.val().frequency);
-        // console.log(snapshot.val().dateAdded);
+    //     // Log everything that's coming out of snapshot
+    //     console.log(snapshot.val());
+    //     console.log(snapshot.val().name);
+    //     console.log(snapshot.val().destination);
+    //     console.log(snapshot.val().start);
+    //     console.log(snapshot.val().frequency);
+    //     // console.log(snapshot.val().dateAdded);
 
-        // console.log(now.diff(moment(snapshot.val().start), 'hh:mm'));
+    //     startConverted = moment(snapshot.val().start,"hh:mm");
+    // 		console.log(startConverted);
 
-        startConverted = moment(snapshot.val().start,"hh:mm");
-    		console.log(startConverted);
+    // 		diffTime = moment().diff(startConverted, "minutes");
+    // 		console.log("DIFFERENCE IN TIME: " + diffTime);
 
-    		diffTime = moment().diff(startConverted, "minutes");
-    		console.log("DIFFERENCE IN TIME: " + diffTime);
+    // 		tRemainder = diffTime % snapshot.val().frequency;
+		  //   console.log(tRemainder);
 
-    		tRemainder = diffTime % snapshot.val().frequency;
-		    console.log(tRemainder);
+		  //   tilTrain = snapshot.val().frequency - tRemainder;
+		  //   console.log("MINUTES UNTIL TRAIN: " + tilTrain);
 
-		    tilTrain = snapshot.val().frequency - tRemainder;
-		    console.log("MINUTES UNTIL TRAIN: " + tilTrain);
+		  //   nextTrain = moment().add(tilTrain, "minutes");
+		  //   console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
 
-		    nextTrain = moment().add(tilTrain, "minutes");
-		    console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
+    //     $('#trainData > tbody').append("<tr><td>" + snapshot.val().name + "</td><td>" + snapshot.val().destination + "</td><td>" + snapshot.val().frequency + "</td><td>" + nextTrain.format("hh:mm") + "</td><td>" + tilTrain + "</td></tr>");
 
-        $('#trainData > tbody').append("<tr><td>" + snapshot.val().name + "</td><td>" + snapshot.val().destination + "</td><td>" + snapshot.val().frequency + "</td><td>" + nextTrain.format("hh:mm") + "</td><td>" + tilTrain + "</td></tr>");
+    // // Handle the errors
+    // }, function(errorObject) {
 
-    // Handle the errors
-    }, function(errorObject) {
-
-        console.log("Errors handled: " + errorObject.code);
-    });
+    //     console.log("Errors handled: " + errorObject.code);
+    // });
 
     // dataRef.orderByChild('dateAdded').limitToLast(1).on('child_added', function(){
 
