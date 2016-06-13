@@ -14,7 +14,7 @@ var nextTrain = "";
 var update = function(){
 	$('#trainData > tbody').empty();
 	dataRef.on("child_added", function(snapshot){
-		startConverted = moment(snapshot.val().start,"hh:mm");
+		startConverted = moment(snapshot.val().start,"HH:mm");
 
 		diffTime = moment().diff(startConverted, "minutes");
 
@@ -24,7 +24,7 @@ var update = function(){
 
     nextTrain = moment().add(tilTrain, "minutes");
    
-    $('#trainData > tbody').append("<tr><td>" + snapshot.val().name + "</td><td>" + snapshot.val().destination + "</td><td>" + snapshot.val().frequency + "</td><td>" + nextTrain.format("hh:mm") + "</td><td>" + tilTrain + "</td></tr>");
+    $('#trainData > tbody').append("<tr><td>" + snapshot.val().name + "</td><td>" + snapshot.val().destination + "</td><td>" + snapshot.val().frequency + "</td><td>" + nextTrain.format("HH:mm") + "</td><td>" + tilTrain + "</td></tr>");
 	})
 };
 
