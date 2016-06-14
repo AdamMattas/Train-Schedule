@@ -97,6 +97,20 @@ $(document).on('ready', function(){
   });
 
   // Capture Button Click
+  $(".signBtn").on("click", function() {
+
+  	$("#signUp").toggleClass('hide show');
+
+  });
+
+  // Capture Button Click
+  $(".loginBtn").on("click", function() {
+
+  	$("#login").toggleClass('hide show');
+
+  });
+
+  // Capture Button Click
   $("#signSubmit").on("click", function() {
 
   	var signEmail = $('#signEmail').val().trim();

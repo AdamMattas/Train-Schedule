@@ -3,6 +3,14 @@
 	margin: 0 auto;
 }
 
+.bottom-margin{
+	margin-bottom: 20px;
+}
+
 .hide{
 	display: none;
+}
+
+.show{
+	display: block;
 }
