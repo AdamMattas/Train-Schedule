@@ -33,7 +33,7 @@ $(document).on('ready', function(){
 
 		    nextTrain = moment().add(tilTrain, "minutes");
 		   
-		    $('#trainData > tbody').append("<tr><td>" + snapshot.val().trainName + "</td><td>" + snapshot.val().destination + "</td><td>" + snapshot.val().frequency + "</td><td>" + nextTrain.format("HH:mm") + "</td><td>" + tilTrain + "</td><td><button class=" + "remove" + " data-id=" + snapshot.key() + ">Remove</button></td><td><button class=" + "edit" + ">Edit</button></td></tr>");
+		    $('#trainData > tbody').append("<tr><td>" + snapshot.val().trainName + "</td><td>" + snapshot.val().destination + "</td><td>" + snapshot.val().frequency + "</td><td>" + nextTrain.format("HH:mm") + "</td><td>" + tilTrain + "</td><td><button class=" + "remove" + " data-id=" + snapshot.key() + ">Remove</button></td><td><button class=" + "edit" + " data-toggle=" + "modal" + " data-target=" + "#myModal" + ">Edit</button></td></tr>");
 			})
 		}else{
 			$('#trainData > thead > tr').append("<th>" + "Train Name" + "</th><th>" + "Destination" + "</th><th>" + "Frequency (min)" + "</th><th>" + "Next Arrival" + "</th><th>" + "Minutes Away" + "</th>");
