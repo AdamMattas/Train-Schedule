@@ -6,6 +6,7 @@ $(document).on('ready', function(){
 
 	// Initial Values
 	var keyId = "";
+	var keyVal = "";
 	var loggedIn = false;
 	var trainName = "";
 	var destination = "";
@@ -33,7 +34,7 @@ $(document).on('ready', function(){
 
 		    nextTrain = moment().add(tilTrain, "minutes");
 		   
-		    $('#trainData > tbody').append("<tr><td>" + snapshot.val().trainName + "</td><td>" + snapshot.val().destination + "</td><td>" + snapshot.val().frequency + "</td><td>" + nextTrain.format("HH:mm") + "</td><td>" + tilTrain + "</td><td><button class=" + "remove" + " data-id=" + snapshot.key() + ">Remove</button></td><td><button class=" + "edit" + " data-toggle=" + "modal" + " data-target=" + "#myModal" + ">Edit</button></td></tr>");
+		    $('#trainData > tbody').append("<tr><td>" + snapshot.val().trainName + "</td><td>" + snapshot.val().destination + "</td><td>" + snapshot.val().frequency + "</td><td>" + nextTrain.format("HH:mm") + "</td><td>" + tilTrain + "</td><td><button class=" + "remove" + " data-id=" + snapshot.key() + ">Remove</button></td><td><button class=" + "edit" + " data-toggle=" + "modal" + " data-target=" + "#myModal" + " data-id=" + JSON.stringify(snapshot.val()) + ">Edit</button></td></tr>");
 			})
 		}else{
 			$('#trainData > thead > tr').append("<th>" + "Train Name" + "</th><th>" + "Destination" + "</th><th>" + "Frequency (min)" + "</th><th>" + "Next Arrival" + "</th><th>" + "Minutes Away" + "</th>");
@@ -100,6 +101,19 @@ $(document).on('ready', function(){
   	keyId = $(this).attr('data-id');
   	console.log(keyId);
   	dataRef.child(keyId).remove();
+
+  });
+
+  // Capture Button Click
+  $(document).on('click', '.edit', function(){
+
+  	keyVal = $(this).attr('data-id');
+  	console.log(keyVal);
+  	keyValNew = JSON.parse(keyVal);
+  	$("#modName").val(keyValNew.trainName);
+  	$("#modDestination").val(keyValNew.destination);
+  	$("#modStart").val(keyValNew.start);
+  	$("#modFrequency").val(keyValNew.frequency);
 
   });
 
