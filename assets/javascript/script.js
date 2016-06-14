@@ -5,6 +5,7 @@ $(document).on('ready', function(){
 	var dataRef = new Firebase("https://adambay.firebaseio.com/");
 
 	// Initial Values
+	var loggedIn = false;
 	var name = "";
 	var destination = "";
 	var start = "";
@@ -17,23 +18,57 @@ $(document).on('ready', function(){
 	var update = function(){
 		$('#trainData > tbody').empty();
 		$('#trainData > thead > tr').empty();
-		$('#trainData > thead > tr').append("<th>" + "Train Name" + "</th><th>" + "Destination" + "</th><th>" + "Frequency (min)" + "</th><th>" + "Next Arrival" + "</th><th>" + "Minutes Away" + "</th>");
-		// $('#trainData > thead > tr').append("<th>" + "Train Name" + "</th><th>" + "Destination" + "</th><th>" + "Frequency (min)" + "</th><th>" + "Next Arrival" + "</th><th>" + "Minutes Away" + "</th><th>" + "Remove Train" + "</th><th>" + "Edit Train" + "</th>");
-		dataRef.on("child_added", function(snapshot){
+		if(loggedIn){
+			$('#trainData > thead > tr').append("<th>" + "Train Name" + "</th><th>" + "Destination" + "</th><th>" + "Frequency (min)" + "</th><th>" + "Next Arrival" + "</th><th>" + "Minutes Away" + "</th><th>" + "Remove Train" + "</th><th>" + "Edit Train" + "</th>");
+			dataRef.on("child_added", function(snapshot){
 			
-			startConverted = moment(snapshot.val().start,"HH:mm");
+				startConverted = moment(snapshot.val().start,"HH:mm");
 
-			diffTime = moment().diff(startConverted, "minutes");
+				diffTime = moment().diff(startConverted, "minutes");
 
-			tRemainder = diffTime % snapshot.val().frequency;
+				tRemainder = diffTime % snapshot.val().frequency;
 
-	    tilTrain = snapshot.val().frequency - tRemainder;
+		    tilTrain = snapshot.val().frequency - tRemainder;
 
-	    nextTrain = moment().add(tilTrain, "minutes");
+		    nextTrain = moment().add(tilTrain, "minutes");
+		   
+		    $('#trainData > tbody').append("<tr><td>" + snapshot.val().name + "</td><td>" + snapshot.val().destination + "</td><td>" + snapshot.val().frequency + "</td><td>" + nextTrain.format("HH:mm") + "</td><td>" + tilTrain + "</td><td><button class=" + "remove" + ">Remove</button></td><td><button class=" + "edit" + ">Edit</button></td></tr>");
+			})
+		}else{
+			$('#trainData > thead > tr').append("<th>" + "Train Name" + "</th><th>" + "Destination" + "</th><th>" + "Frequency (min)" + "</th><th>" + "Next Arrival" + "</th><th>" + "Minutes Away" + "</th>");
+			dataRef.on("child_added", function(snapshot){
+			
+				startConverted = moment(snapshot.val().start,"HH:mm");
+
+				diffTime = moment().diff(startConverted, "minutes");
+
+				tRemainder = diffTime % snapshot.val().frequency;
+
+		    tilTrain = snapshot.val().frequency - tRemainder;
+
+		    nextTrain = moment().add(tilTrain, "minutes");
+		   
+		    $('#trainData > tbody').append("<tr><td>" + snapshot.val().name + "</td><td>" + snapshot.val().destination + "</td><td>" + snapshot.val().frequency + "</td><td>" + nextTrain.format("HH:mm") + "</td><td>" + tilTrain + "</td></tr>");
+			})
+		}
+		
+		// $('#trainData > thead > tr').append("<th>" + "Train Name" + "</th><th>" + "Destination" + "</th><th>" + "Frequency (min)" + "</th><th>" + "Next Arrival" + "</th><th>" + "Minutes Away" + "</th>");
+		// // $('#trainData > thead > tr').append("<th>" + "Train Name" + "</th><th>" + "Destination" + "</th><th>" + "Frequency (min)" + "</th><th>" + "Next Arrival" + "</th><th>" + "Minutes Away" + "</th><th>" + "Remove Train" + "</th><th>" + "Edit Train" + "</th>");
+		// dataRef.on("child_added", function(snapshot){
+			
+		// 	startConverted = moment(snapshot.val().start,"HH:mm");
+
+		// 	diffTime = moment().diff(startConverted, "minutes");
+
+		// 	tRemainder = diffTime % snapshot.val().frequency;
+
+	 //    tilTrain = snapshot.val().frequency - tRemainder;
+
+	 //    nextTrain = moment().add(tilTrain, "minutes");
 	   
-	    $('#trainData > tbody').append("<tr><td>" + snapshot.val().name + "</td><td>" + snapshot.val().destination + "</td><td>" + snapshot.val().frequency + "</td><td>" + nextTrain.format("HH:mm") + "</td><td>" + tilTrain + "</td></tr>");
-	    //$('#trainData > tbody').append("<tr><td>" + snapshot.val().name + "</td><td>" + snapshot.val().destination + "</td><td>" + snapshot.val().frequency + "</td><td>" + nextTrain.format("HH:mm") + "</td><td>" + tilTrain + "</td><td><button class=" + "remove" + ">Remove</button></td><td><button class=" + "edit" + ">Edit</button></td></tr>");
-		})
+	 //    $('#trainData > tbody').append("<tr><td>" + snapshot.val().name + "</td><td>" + snapshot.val().destination + "</td><td>" + snapshot.val().frequency + "</td><td>" + nextTrain.format("HH:mm") + "</td><td>" + tilTrain + "</td></tr>");
+	 //    //$('#trainData > tbody').append("<tr><td>" + snapshot.val().name + "</td><td>" + snapshot.val().destination + "</td><td>" + snapshot.val().frequency + "</td><td>" + nextTrain.format("HH:mm") + "</td><td>" + tilTrain + "</td><td><button class=" + "remove" + ">Remove</button></td><td><button class=" + "edit" + ">Edit</button></td></tr>");
+		// })
 	};
 
 	update();
@@ -61,42 +96,48 @@ $(document).on('ready', function(){
     return false;
   });
 
-    //Firebase watcher + initial loader HINT: .on("value")
-    // dataRef.on("child_added", function(snapshot){
+  // Capture Button Click
+  $("#signSubmit").on("click", function() {
 
-    //     // Log everything that's coming out of snapshot
-    //     console.log(snapshot.val());
-    //     console.log(snapshot.val().name);
-    //     console.log(snapshot.val().destination);
-    //     console.log(snapshot.val().start);
-    //     console.log(snapshot.val().frequency);
-    //     // console.log(snapshot.val().dateAdded);
+  	var signEmail = $('#signEmail').val().trim();
+  	var signPass = $('#signPass').val().trim();
 
-    //     startConverted = moment(snapshot.val().start,"hh:mm");
-    // 		console.log(startConverted);
+	  dataRef.createUser({
+	  email    : signEmail,
+	  password : signPass
+			}, function(error, userData) {
+			  if (error) {
+			    console.log("Error creating user:", error);
+			  } else {
+			    console.log("Successfully created user account with uid:", userData.uid);
+			  }
+			});
+	  // Don't refresh the page!
+    return false;
+  });
 
-    // 		diffTime = moment().diff(startConverted, "minutes");
-    // 		console.log("DIFFERENCE IN TIME: " + diffTime);
+  // Capture Button Click
+  $("#loginSubmit").on("click", function() {
 
-    // 		tRemainder = diffTime % snapshot.val().frequency;
-		  //   console.log(tRemainder);
+  	var loginEmail = $('#loginEmail').val().trim();
+  	var loginPass = $('#loginPass').val().trim();
 
-		  //   tilTrain = snapshot.val().frequency - tRemainder;
-		  //   console.log("MINUTES UNTIL TRAIN: " + tilTrain);
-
-		  //   nextTrain = moment().add(tilTrain, "minutes");
-		  //   console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
-
-    //     $('#trainData > tbody').append("<tr><td>" + snapshot.val().name + "</td><td>" + snapshot.val().destination + "</td><td>" + snapshot.val().frequency + "</td><td>" + nextTrain.format("hh:mm") + "</td><td>" + tilTrain + "</td></tr>");
-
-    // // Handle the errors
-    // }, function(errorObject) {
-
-    //     console.log("Errors handled: " + errorObject.code);
-    // });
-
-    // dataRef.orderByChild('dateAdded').limitToLast(1).on('child_added', function(){
-
-    // });
+	  dataRef.authWithPassword({
+	  email    : loginEmail,
+	  password : loginPass
+			}, function(error, authData) {
+			  if (error) {
+			    console.log("Login Failed!", error);
+			  } else {
+			    console.log("Authenticated successfully with payload:", authData);
+			    remember: "sessionOnly"
+			    loggedIn = true;
+			    console.log(loggedIn);
+			    $("#signUp, #login").addClass('hide');
+			  }
+		});
+	  // Don't refresh the page!
+    return false;
+  });
 
 });
