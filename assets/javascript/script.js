@@ -1,57 +1,65 @@
-// Firebase link
-var dataRef = new Firebase("https://adambay.firebaseio.com/");
-
-// Initial Values
-var name = "";
-var destination = "";
-var start = "";
-var frequency = 0;
-var startConverted = "";
-var diffTime = "";
-var tRemainder = "";
-var tilTrain = "";
-var nextTrain = "";
-var update = function(){
-	$('#trainData > tbody').empty();
-	dataRef.on("child_added", function(snapshot){
-		startConverted = moment(snapshot.val().start,"HH:mm");
-
-		diffTime = moment().diff(startConverted, "minutes");
-
-		tRemainder = diffTime % snapshot.val().frequency;
-
-    tilTrain = snapshot.val().frequency - tRemainder;
-
-    nextTrain = moment().add(tilTrain, "minutes");
-   
-    $('#trainData > tbody').append("<tr><td>" + snapshot.val().name + "</td><td>" + snapshot.val().destination + "</td><td>" + snapshot.val().frequency + "</td><td>" + nextTrain.format("HH:mm") + "</td><td>" + tilTrain + "</td></tr>");
-	})
-};
-
 //on ready function wrapped around jQuery
 $(document).on('ready', function(){
 
-	// update();
+	// Firebase link
+	var dataRef = new Firebase("https://adambay.firebaseio.com/");
+
+	// Initial Values
+	var name = "";
+	var destination = "";
+	var start = "";
+	var frequency = 0;
+	var startConverted = "";
+	var diffTime = "";
+	var tRemainder = "";
+	var tilTrain = "";
+	var nextTrain = "";
+	var update = function(){
+		$('#trainData > tbody').empty();
+		$('#trainData > thead > tr').empty();
+		$('#trainData > thead > tr').append("<th>" + "Train Name" + "</th><th>" + "Destination" + "</th><th>" + "Frequency (min)" + "</th><th>" + "Next Arrival" + "</th><th>" + "Minutes Away" + "</th>");
+		// $('#trainData > thead > tr').append("<th>" + "Train Name" + "</th><th>" + "Destination" + "</th><th>" + "Frequency (min)" + "</th><th>" + "Next Arrival" + "</th><th>" + "Minutes Away" + "</th><th>" + "Remove Train" + "</th><th>" + "Edit Train" + "</th>");
+		dataRef.on("child_added", function(snapshot){
+			
+			startConverted = moment(snapshot.val().start,"HH:mm");
+
+			diffTime = moment().diff(startConverted, "minutes");
+
+			tRemainder = diffTime % snapshot.val().frequency;
+
+	    tilTrain = snapshot.val().frequency - tRemainder;
+
+	    nextTrain = moment().add(tilTrain, "minutes");
+	   
+	    $('#trainData > tbody').append("<tr><td>" + snapshot.val().name + "</td><td>" + snapshot.val().destination + "</td><td>" + snapshot.val().frequency + "</td><td>" + nextTrain.format("HH:mm") + "</td><td>" + tilTrain + "</td></tr>");
+	    //$('#trainData > tbody').append("<tr><td>" + snapshot.val().name + "</td><td>" + snapshot.val().destination + "</td><td>" + snapshot.val().frequency + "</td><td>" + nextTrain.format("HH:mm") + "</td><td>" + tilTrain + "</td><td><button class=" + "remove" + ">Remove</button></td><td><button class=" + "edit" + ">Edit</button></td></tr>");
+		})
+	};
+
+	update();
   setInterval(update, 1000);
 
 	// Capture Button Click
-    $("#submitTrain").on("click", function() {
+  $("#submitTrain").on("click", function() {
 
-        name = $('#trainName').val().trim();
-        destination = $('#destination').val().trim();
-        start = $('#start').val().trim();
-        frequency = $('#frequency').val().trim();
+    name = $('#trainName').val().trim();
+    destination = $('#destination').val().trim();
+    start = $('#start').val().trim();
+    frequency = $('#frequency').val().trim();
 
-        dataRef.push({
-            'name': name,
-            'destination': destination,
-            'start': start,
-            'frequency': frequency,
-        });
-
-        // Don't refresh the page!
-        return false;
+    dataRef.push({
+        'name': name,
+        'destination': destination,
+        'start': start,
+        'frequency': frequency,
     });
+
+    //reset text field to placeholder
+		$("#trainName , #destination , #start , #frequency").val('');
+
+    // Don't refresh the page!
+    return false;
+  });
 
     //Firebase watcher + initial loader HINT: .on("value")
     // dataRef.on("child_added", function(snapshot){
