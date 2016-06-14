@@ -5,8 +5,9 @@ $(document).on('ready', function(){
 	var dataRef = new Firebase("https://adambay.firebaseio.com/");
 
 	// Initial Values
+	var keyId = "";
 	var loggedIn = false;
-	var name = "";
+	var trainName = "";
 	var destination = "";
 	var start = "";
 	var frequency = 0;
@@ -32,7 +33,7 @@ $(document).on('ready', function(){
 
 		    nextTrain = moment().add(tilTrain, "minutes");
 		   
-		    $('#trainData > tbody').append("<tr><td>" + snapshot.val().name + "</td><td>" + snapshot.val().destination + "</td><td>" + snapshot.val().frequency + "</td><td>" + nextTrain.format("HH:mm") + "</td><td>" + tilTrain + "</td><td><button class=" + "remove" + ">Remove</button></td><td><button class=" + "edit" + ">Edit</button></td></tr>");
+		    $('#trainData > tbody').append("<tr><td>" + snapshot.val().trainName + "</td><td>" + snapshot.val().destination + "</td><td>" + snapshot.val().frequency + "</td><td>" + nextTrain.format("HH:mm") + "</td><td>" + tilTrain + "</td><td><button class=" + "remove" + " data-id=" + snapshot.key() + ">Remove</button></td><td><button class=" + "edit" + ">Edit</button></td></tr>");
 			})
 		}else{
 			$('#trainData > thead > tr').append("<th>" + "Train Name" + "</th><th>" + "Destination" + "</th><th>" + "Frequency (min)" + "</th><th>" + "Next Arrival" + "</th><th>" + "Minutes Away" + "</th>");
@@ -48,27 +49,10 @@ $(document).on('ready', function(){
 
 		    nextTrain = moment().add(tilTrain, "minutes");
 		   
-		    $('#trainData > tbody').append("<tr><td>" + snapshot.val().name + "</td><td>" + snapshot.val().destination + "</td><td>" + snapshot.val().frequency + "</td><td>" + nextTrain.format("HH:mm") + "</td><td>" + tilTrain + "</td></tr>");
+		    $('#trainData > tbody').append("<tr data-id=" + snapshot.key() + "><td>" + snapshot.val().trainName + "</td><td>" + snapshot.val().destination + "</td><td>" + snapshot.val().frequency + "</td><td>" + nextTrain.format("HH:mm") + "</td><td>" + tilTrain + "</td></tr>");
 			})
 		}
 		
-		// $('#trainData > thead > tr').append("<th>" + "Train Name" + "</th><th>" + "Destination" + "</th><th>" + "Frequency (min)" + "</th><th>" + "Next Arrival" + "</th><th>" + "Minutes Away" + "</th>");
-		// // $('#trainData > thead > tr').append("<th>" + "Train Name" + "</th><th>" + "Destination" + "</th><th>" + "Frequency (min)" + "</th><th>" + "Next Arrival" + "</th><th>" + "Minutes Away" + "</th><th>" + "Remove Train" + "</th><th>" + "Edit Train" + "</th>");
-		// dataRef.on("child_added", function(snapshot){
-			
-		// 	startConverted = moment(snapshot.val().start,"HH:mm");
-
-		// 	diffTime = moment().diff(startConverted, "minutes");
-
-		// 	tRemainder = diffTime % snapshot.val().frequency;
-
-	 //    tilTrain = snapshot.val().frequency - tRemainder;
-
-	 //    nextTrain = moment().add(tilTrain, "minutes");
-	   
-	 //    $('#trainData > tbody').append("<tr><td>" + snapshot.val().name + "</td><td>" + snapshot.val().destination + "</td><td>" + snapshot.val().frequency + "</td><td>" + nextTrain.format("HH:mm") + "</td><td>" + tilTrain + "</td></tr>");
-	 //    //$('#trainData > tbody').append("<tr><td>" + snapshot.val().name + "</td><td>" + snapshot.val().destination + "</td><td>" + snapshot.val().frequency + "</td><td>" + nextTrain.format("HH:mm") + "</td><td>" + tilTrain + "</td><td><button class=" + "remove" + ">Remove</button></td><td><button class=" + "edit" + ">Edit</button></td></tr>");
-		// })
 	};
 
 	update();
@@ -77,13 +61,13 @@ $(document).on('ready', function(){
 	// Capture Button Click
   $("#submitTrain").on("click", function() {
 
-    name = $('#trainName').val().trim();
+    trainName = $('#trainName').val().trim();
     destination = $('#destination').val().trim();
     start = $('#start').val().trim();
     frequency = $('#frequency').val().trim();
 
     dataRef.push({
-        'name': name,
+        'trainName': trainName,
         'destination': destination,
         'start': start,
         'frequency': frequency,
@@ -107,6 +91,15 @@ $(document).on('ready', function(){
   $(".loginBtn").on("click", function() {
 
   	$("#login").toggleClass('hide show');
+
+  });
+
+  // Capture Button Click
+  $(document).on('click', '.remove', function(){
+
+  	keyId = $(this).attr('data-id');
+  	console.log(keyId);
+  	dataRef.child(keyId).remove();
 
   });
 
