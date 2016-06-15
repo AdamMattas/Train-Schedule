@@ -6,6 +6,7 @@ $(document).on('ready', function(){
 
 	// Initial Values
 	var keyId = "";
+	var keyId2 = "";
 	var keyVal = "";
 	var loggedIn = false;
 	var trainName = "";
@@ -34,7 +35,7 @@ $(document).on('ready', function(){
 
 		    nextTrain = moment().add(tilTrain, "minutes");
 		   
-		    $('#trainData > tbody').append("<tr><td>" + snapshot.val().trainName + "</td><td>" + snapshot.val().destination + "</td><td>" + snapshot.val().frequency + "</td><td>" + nextTrain.format("HH:mm") + "</td><td>" + tilTrain + "</td><td><button class=" + "remove" + " data-id=" + snapshot.key() + ">Remove</button></td><td><button class=" + "edit" + " data-toggle=" + "modal" + " data-target=" + "#myModal" + " data-id=" + JSON.stringify(snapshot.val()) + ">Edit</button></td></tr>");
+		    $('#trainData > tbody').append("<tr><td>" + snapshot.val().trainName + "</td><td>" + snapshot.val().destination + "</td><td>" + snapshot.val().frequency + "</td><td>" + nextTrain.format("HH:mm") + "</td><td>" + tilTrain + "</td><td><button class=" + "remove" + " data-id=" + snapshot.key() + ">Remove</button></td><td><button class=" + "edit" + " data-toggle=" + "modal" + " data-target=" + "#myModal" + " data-key=" + JSON.stringify(snapshot.val()) + " data-id=" + snapshot.key() + ">Edit</button></td></tr>");
 			})
 		}else{
 			$('#trainData > thead > tr').append("<th>" + "Train Name" + "</th><th>" + "Destination" + "</th><th>" + "Frequency (min)" + "</th><th>" + "Next Arrival" + "</th><th>" + "Minutes Away" + "</th>");
@@ -107,14 +108,38 @@ $(document).on('ready', function(){
   // Capture Button Click
   $(document).on('click', '.edit', function(){
 
-  	keyVal = $(this).attr('data-id');
+  	keyVal = $(this).attr('data-key');
+  	keyId2 = $(this).attr('data-id');
   	console.log(keyVal);
+  	console.log(keyId2);
   	keyValNew = JSON.parse(keyVal);
   	$("#modName").val(keyValNew.trainName);
   	$("#modDestination").val(keyValNew.destination);
   	$("#modStart").val(keyValNew.start);
   	$("#modFrequency").val(keyValNew.frequency);
 
+  });
+
+  // Capture Button Click
+  $(document).on('click', '#submitMod', function() {
+
+    trainName = $('#modName').val().trim();
+    destination = $('#modDestination').val().trim();
+    start = $('#modStart').val().trim();
+    frequency = $('#modFrequency').val().trim();
+
+    dataRef.child(keyId2).update({
+        'trainName': trainName,
+        'destination': destination,
+        'start': start,
+        'frequency': frequency,
+    });
+
+    //reset text field to placeholder
+		$("#modName , #modDestination , #modStart , #modFrequency").val('');
+
+    // Don't refresh the page!
+    return false;
   });
 
   // Capture Button Click
