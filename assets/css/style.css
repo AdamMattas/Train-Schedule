@@ -1,8 +1,10 @@
+/*sets page width to 90% and centered*/
 .page-wrapper{
 	width: 90%;
 	margin: 0 auto;
 }
 
+/*begin interchangeable variables*/
 .bottom-margin{
 	margin-bottom: 20px;
 }
@@ -15,6 +17,12 @@
 	display: block;
 }
 
+.white{
+	color: #ffffff !important;
+}
+/*end interchangeable variables*/
+
+/*styling for jumbotron header*/
 .jumbotron{
 	background-image: url("../images/tracks.jpg");
 	background-size: cover;
@@ -22,10 +30,8 @@
 	border-bottom-right-radius: 5px;
 	border-bottom-left-radius: 5px;
 }
-.white{
-	color: #ffffff !important;
-}
 
+/*begin overrides for bootstrap*/
 .btn-default{
 	background-color: #000000;
 	border-color: #000000;
@@ -40,3 +46,4 @@
 .panel-default{
 	border-color: #000000;
 }
+/*end overrides for bootstrap*/
