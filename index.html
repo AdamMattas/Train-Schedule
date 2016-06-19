@@ -26,15 +26,15 @@
 		
 		<!-- Jumbotron Title -->
 		<div class="jumbotron">
-			<h1 class="text-center">Trains Trains Trains</h1>
-			<h3 class="text-center">Don't miss the train!</h3>
+			<h1 class="text-center white">Trains Trains Trains</h1>
+			<h3 class="text-center white">Don't miss the train!</h3>
 		</div>
 
-	  <!-- Modal -->
+	  <!-- Modal for editing added trains -->
 	  <div class="modal fade" id="myModal" role="dialog">
 	    <div class="modal-dialog">
 	    
-	      <!-- Modal content-->
+	      <!-- Modal content inputs populated from script.js-->
 	      <div class="modal-content">
 	        <div class="modal-header">
 	          <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -58,7 +58,7 @@
 								<label for="modFrequency">Frequency (min)</label>
 								<input type="number" class="form-control" id="modFrequency">
 							</div>
-							<input id="submitMod" type="submit" class="btn btn-primary">
+							<input id="submitMod" type="submit" class="btn btn-default">
 						</form>
 	        </div>
 	        <div class="modal-footer">
@@ -69,9 +69,9 @@
 	    </div>
 	  </div>
 
-		<!-- Single button -->
+		<!-- login/signup dropdown button -->
 		<div class="btn-group bottom-margin">
-		  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		  <button id="login-button" type="button" class="btn btn-default dropdown-toggle show" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 		    Login <span class="caret"></span>
 		  </button>
 		  <ul class="dropdown-menu">
@@ -79,12 +79,14 @@
 		    <li role="separator" class="divider"></li>
 		    <li><a href="#" class="signBtn">Sign Up</a></li>
 		  </ul>
+		  <!-- Logout Button initially hidden -->
+		  <button id="logout-button" type="button" class="btn btn-default hide">Logout</button>
 		</div>
 
-		<!-- Sign Up -->
+		<!-- Sign Up Panel initially hidden-->
 		<div id="signUp" class="row hide">
 			<div class="col-lg-12">
-				<div class="panel panel-primary">
+				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title">Sign Up</h3>
 					</div>
@@ -98,17 +100,17 @@
 								<label for="signPass">Password</label>
 								<input type="password" class="form-control" id="signPass">
 							</div>
-							<input id="signSubmit" type="submit" class="btn btn-primary">
+							<input id="signSubmit" type="submit" class="btn btn-default">
 						</form>
 					</div>
 				</div>
 			</div>	
 		</div>
 
-		<!-- Login -->
+		<!-- Login Panel initially hidden-->
 		<div id="login" class="row hide">
 			<div class="col-lg-12">
-				<div class="panel panel-primary">
+				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title">Login</h3>
 					</div>
@@ -122,15 +124,15 @@
 								<label for="loginPass">Password</label>
 								<input type="password" class="form-control" id="loginPass">
 							</div>
-							<input id="loginSubmit" type="submit" class="btn btn-primary">
+							<input id="loginSubmit" type="submit" class="btn btn-default">
 						</form>
 					</div>
 				</div>
 			</div>	
 		</div>
 
-		<!-- Train Times -->
-		<div class="panel panel-primary">
+		<!-- Train Times Panel continuously updated from script.js-->
+		<div class="panel panel-default">
 		  <div class="panel-heading">Current Train Schedule</div>
 		  <div class="panel-body">
 		    <table id="trainData" class="table">
@@ -150,10 +152,10 @@
 		  </div>
 		</div>
 
-		<!-- Add Train -->
+		<!-- Add New Train to Train Times Panel -->
 		<div class="row">
 			<div class="col-lg-12">
-				<div class="panel panel-primary">
+				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title">Add Train</h3>
 					</div>
@@ -175,7 +177,7 @@
 								<label for="frequency">Frequency (min)</label>
 								<input type="number" class="form-control" id="frequency">
 							</div>
-							<input id="submitTrain" type="submit" class="btn btn-primary">
+							<input id="submitTrain" type="submit" class="btn btn-default">
 						</form>
 					</div>
 				</div>

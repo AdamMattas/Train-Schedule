@@ -14,3 +14,29 @@
 .show{
 	display: block;
 }
+
+.jumbotron{
+	background-image: url("../images/tracks.jpg");
+	background-size: cover;
+	background-position: 50% 50%;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+.white{
+	color: #ffffff !important;
+}
+
+.btn-default{
+	background-color: #000000;
+	border-color: #000000;
+	color: #ffffff;
+}
+
+.panel-default>.panel-heading{
+	background-color: #000000;
+	color: #ffffff;
+}
+
+.panel-default{
+	border-color: #000000;
+}
